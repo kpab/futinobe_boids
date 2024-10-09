@@ -12,7 +12,7 @@ START_HUMAN_COUNT = 10 # 初期
 SIYA_LEVEL = 30.0 # 👁️
 MAX_SPEED = 5.0 # 🦵
 BORN_RATE = 0.3
-SEKKATI = 0.4
+SEKKATI = 0.2
 YASASIA = 0.2
 
 
@@ -122,8 +122,8 @@ class Simulation:
             ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1]))
 
         for wall in self.fake_walls:
-            ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1]))
-            # ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1],fc="r"))
+            # ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1]))
+            ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1],fc="r"))
 
         # 目的地の描画
         for dest in self.goals:
@@ -181,7 +181,7 @@ sim.add_start_position(470, 400)
 sim.add_start_position(470, 380) 
 
 
-# 目的地の追加（重みつき）
+# 目的地(確率あり）
 
 sim.add_goal(470, 260, 0.1)  # 40%の確率
 sim.add_goal(470, 280, 0.1)
