@@ -59,6 +59,7 @@ class Agent:
         
         # -- 壁との回避 --
         for wall in walls:
+            # くりっぷ!!
             closest_point = np.clip(self.position, wall[:2], wall[2:])
             diff = self.position - closest_point
             dist = np.linalg.norm(diff)
@@ -107,7 +108,6 @@ class Simulation:
         for agent in self.agents:
             agent.update(self.agents, self.walls)
      
-
         self.agents = [agent for agent in self.agents if np.linalg.norm(agent.position - agent.goal) > 15]
         if np.random.rand() < BORN_RATE:  # 確率で新しいエージェントを生成
             self.born_agent()
@@ -173,6 +173,13 @@ sim.add_start_position(55, 420)
 # エスカレーター(上り)
 sim.add_start_position(310, 440) 
 sim.add_start_position(310, 420) 
+
+# 階段(右)
+sim.add_start_position(470, 440) 
+sim.add_start_position(470, 420) 
+sim.add_start_position(470, 400) 
+sim.add_start_position(470, 380) 
+
 
 # 目的地の追加（重みつき）
 
