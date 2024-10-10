@@ -1,6 +1,5 @@
 '''
-改札を壁にすると回避してしまい、辿り着けない & 壁付近の目的地辿り着けない
-→ 見た目だけの壁追加
+迷惑系の修正
 '''
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,7 +12,7 @@ SIYA_LEVEL = 20.0 # 👁️
 MAX_SPEED = 2.0 # 🦵
 BORN_RATE = 0.5
 SEKKATI = 0.2
-YASASIA = 0.4
+YASASISA = 0.4
 
 
 
@@ -36,7 +35,7 @@ class Agent:
         avoid_power = self.impact_avoid(agents, walls) * 0.5
         
         # 速度の更新
-        self.velocity += (sekkati_level_velocity - self.velocity) * SEKKATI + avoid_power * YASASIA
+        self.velocity += (sekkati_level_velocity - self.velocity) * SEKKATI + avoid_power * YASASISA
         if np.linalg.norm(self.velocity) > self.max_speed:
             self.velocity = self.velocity / np.linalg.norm(self.velocity) * self.max_speed
         
