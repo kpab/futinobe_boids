@@ -1,5 +1,5 @@
 '''
-人と壁回避の重みの分離
+人と障害物の認識視野の分離
 '''
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,7 +8,8 @@ from matplotlib.patches import Rectangle
 
 FRAME_COUNT = 500
 START_HUMAN_COUNT = 10 # 初期
-SIYA_LEVEL = 16.0 # 👁️
+HITO_SIYA_LEVEL = 16.0 # 👁️
+WALL_SIYA_LEVEL = 30.0 # 👁️
 MAX_SPEED = 2.0 # 🦵
 BORN_RATE = 1
 SEKKATI = 0.2
@@ -23,7 +24,8 @@ class Agent:
         self.goal = np.array(goal)
         self.color = color
         self.max_speed = MAX_SPEED
-        self.siya = SIYA_LEVEL
+        self.hitosiya = HITO_SIYA_LEVEL
+        self.wallsiya = WALL_SIYA_LEVEL
         self.futinobe = futinobe
     def update(self, agents, walls):
         # 目的地に向かう力
@@ -54,8 +56,8 @@ class Agent:
             if other != self: # 自分じゃない
                 diff = self.position - other.position
                 dist = np.linalg.norm(diff)
-                if 0 < dist < self.siya:
-                    human_avoid_power += diff / dist * (self.siya - dist) # 他人が近いほど強く回避
+                if 0 < dist < self.hitosiya:
+                    human_avoid_power += diff / dist * (self.hitosiya - dist) # 他人が近いほど強く回避
         
         # -- 壁との回避 --
         for wall in walls:
@@ -63,8 +65,8 @@ class Agent:
             closest_point = np.clip(self.position, wall[:2], wall[2:])
             diff = self.position - closest_point
             dist = np.linalg.norm(diff)
-            if 0 < dist < self.siya:
-                wall_avoid_power += diff / dist * (self.siya - dist)  # 壁が近いほど強く回避
+            if 0 < dist < self.wallsiya:
+                wall_avoid_power += diff / dist * (self.wallsiya - dist)  # 壁が近いほど強く回避
         
         return human_avoid_power, wall_avoid_power
 
