@@ -1,5 +1,5 @@
 '''
-人と障害物の認識視野の分離
+人と障害物の認識視野の分離(壁の認識視野を大きく、重みを小さく)
 '''
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,12 +9,12 @@ from matplotlib.patches import Rectangle
 FRAME_COUNT = 500
 START_HUMAN_COUNT = 10 # 初期
 HITO_SIYA_LEVEL = 16.0 # 👁️
-WALL_SIYA_LEVEL = 25.0 # 👁️
-MAX_SPEED = 3.0 # 🦵
-BORN_RATE = 0.3
+WALL_SIYA_LEVEL = 40.0 # 👁️
+MAX_SPEED = 2.0 # 🦵
+BORN_RATE = 1
 SEKKATI = 0.2
 YASASISA = 0.08 # 人回避の重み
-AVOID_WALL_WEIGHT = 0.4 # 壁回避の重み
+AVOID_WALL_WEIGHT = 0.05 # 壁回避の重み
 FUTINOBE_RATE = 0.2
 
 class Agent:

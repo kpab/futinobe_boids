@@ -1,5 +1,5 @@
 '''
-人と障害物の認識視野の分離
+October08.pyに、壁を滑らかに、フェイク壁の追加
 '''
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,12 +9,12 @@ from matplotlib.patches import Rectangle
 FRAME_COUNT = 500
 START_HUMAN_COUNT = 10 # 初期
 HITO_SIYA_LEVEL = 16.0 # 👁️
-WALL_SIYA_LEVEL = 25.0 # 👁️
+WALL_SIYA_LEVEL = 60.0 # 👁️
 MAX_SPEED = 3.0 # 🦵
-BORN_RATE = 0.3
-SEKKATI = 0.2
+BORN_RATE = 0.5
+SEKKATI = 0.3
 YASASISA = 0.08 # 人回避の重み
-AVOID_WALL_WEIGHT = 0.4 # 壁回避の重み
+AVOID_WALL_WEIGHT = 0.05 # 壁回避の重み
 FUTINOBE_RATE = 0.2
 
 class Agent:
@@ -177,13 +177,19 @@ sim = Simulation(500, 500)
 # 壁の追加
 sim.add_wall(0, 0, 30, 500) # 左
 sim.add_wall(485, 0, 500, 500) # 右
-sim.add_wall(0, 450, 500, 500) # 上
+sim.add_wall(0, 450, 290, 500) # 上
+sim.add_wall(290, 480, 500, 500) # 上
 sim.add_wall(0, 0, 500, 150) # 下
 sim.add_wall(0, 0, 300, 300) # 左下
 
 sim.add_wall(250, 370, 290, 450)
+sim.add_wall(240, 380, 250, 450)
 sim.add_wall(230, 390, 250, 450)
-sim.add_wall(210, 410, 230, 450)
+sim.add_wall(220, 400, 230, 450)
+sim.add_wall(210, 410, 220, 450)
+sim.add_wall(200, 420, 210, 450)
+sim.add_wall(190, 430, 200, 450)
+
 
 sim.add_wall(50, 300, 150, 320)
 
@@ -191,6 +197,8 @@ sim.add_wall(50, 300, 150, 320)
 sim.add_fake_wall(475, 0, 500, 500)
 sim.add_fake_wall(30,300, 50, 450)
 sim.add_fake_wall(290, 370, 300, 450)
+# 追加
+sim.add_fake_wall(290, 450, 500, 480) # 上
 
 # スタート位置の追加
 # --- futinobe 淵野辺民
