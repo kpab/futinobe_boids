@@ -218,9 +218,12 @@ sim.add_wall(0, 0, 500, 150) # 下
 sim.add_wall(0, 0, 300, 300) # 左下
 
 sim.add_wall(250, 370, 290, 450)
+sim.add_wall(240, 380, 250, 450)
 sim.add_wall(230, 390, 250, 450)
-sim.add_wall(210, 410, 230, 450)
-
+sim.add_wall(220, 400, 230, 450)
+sim.add_wall(210, 410, 220, 450)
+sim.add_wall(200, 420, 210, 450)
+sim.add_wall(190, 430, 200, 450)
 sim.add_wall(50, 300, 150, 320)
 
 # フェイク壁
