@@ -1,5 +1,5 @@
 '''
-October08.pyに、壁を滑らかに、フェイク壁の追加
+中間地点の実装(完全版)
 '''
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,16 +9,16 @@ from matplotlib.patches import Rectangle
 FRAME_COUNT = 500
 START_HUMAN_COUNT = 10 # 初期
 HITO_SIYA_LEVEL = 16.0 # 👁️
-WALL_SIYA_LEVEL =60.0 # 👁️
+WALL_SIYA_LEVEL = 16.0 # 👁️
 MAX_SPEED = 3.0 # 🦵
-BORN_RATE = 0.5
+BORN_RATE = 1
 SEKKATI = 0.3
 YASASISA = 0.08 # 人回避の重み
 AVOID_WALL_WEIGHT = 0.05 # 壁回避の重み
 FUTINOBE_RATE = 0.2
 
 class Agent:
-    def __init__(self, position, goal, color, futinobe):
+    def __init__(self, position, goal, color, futinobe, middle, middle_position=None):
         self.position = np.array(position, dtype=float)
         self.velocity = np.zeros(2)
         self.goal = np.array(goal)
@@ -27,9 +27,18 @@ class Agent:
         self.hitosiya = HITO_SIYA_LEVEL
         self.wallsiya = WALL_SIYA_LEVEL
         self.futinobe = futinobe
+        self.middle = middle
+        if middle:
+            self.middle_position = middle_position
+        else:
+            self.middle_position = None
+
     def update(self, agents, walls):
         # 目的地に向かう力
-        sekkati_level_velocity = (self.goal - self.position)
+        if self.middle and self.middle_position is not None:
+            sekkati_level_velocity = (self.middle_position - self.position)
+        else:
+            sekkati_level_velocity = (self.goal - self.position)
         if np.linalg.norm(sekkati_level_velocity) > 0:
             sekkati_level_velocity = sekkati_level_velocity / np.linalg.norm(sekkati_level_velocity) * self.max_speed
         
@@ -46,6 +55,11 @@ class Agent:
           # 目的地に近づいたら速度を減少させる
         if np.linalg.norm(self.position - self.goal) < 20:
             self.velocity *= 0.5  # 目的地に近づいたらスピードを落とす
+        
+        # 中間地点に着いたら目的地を変更
+        if self.middle and self.middle_position is not None:
+            if np.linalg.norm(self.position - self.middle_position) < 20:
+                self.middle_position = None
 
     def impact_avoid(self, agents, walls):
         human_avoid_power = np.zeros(2) # 初期化
@@ -80,33 +94,50 @@ class Simulation:
         self.start_positions = []
         self.start_enter = []
         self.start_exit = []
+        self.start_middle = [] # 中間地点が必要なスタート位置
         self.goals = []
+        self.middle_goals = [] # 中間地点が必要な目的地
+        self.middle_positions = [] # 中間地点
         self.goal_enter = []
         self.goal_exit = []
         self.goal_weights = []
         self.colors = ['red', 'blue', 'green', 'pink', 'purple']
 
+
+    # 壁
     def add_wall(self, x1, y1, x2, y2):
         self.walls.append((x1, y1, x2, y2))
 
+    # フェイク壁
     def add_fake_wall(self, x1, y1, x2, y2):
         self.fake_walls.append((x1, y1, x2, y2))
 
-    def add_start_position(self, x, y, futinobe):
+    # スタート位置
+    def add_start_position(self, x, y, futinobe, middle=False):
         self.start_positions.append((x, y))
         if futinobe:
             self.start_enter.append((x, y))
         else:
             self.start_exit.append((x, y))
+        if middle:
+            self.start_middle.append((x, y))
 
-    def add_goal(self, x, y, weight, futinobe):
+    # 目的地
+    def add_goal(self, x, y, weight, futinobe, middle=False):
         self.goals.append((x, y))
         self.goal_weights.append(weight)
         if futinobe:
             self.goal_enter.append((x, y))
         else:
             self.goal_exit.append((x, y))
+        if middle:
+            self.middle_goals.append((x, y))
 
+    # 中間地点
+    def add_middle_position(self, x, y):
+        self.middle_positions.append((x, y))
+
+    # エージェントの生成
     def born_agent(self):
         if not self.start_positions or not self.goals:
             return
@@ -115,22 +146,28 @@ class Simulation:
             futinobe = True
         else:
             futinobe = False
-
+            
         if futinobe:
             start_position = self.start_enter[np.random.randint(len(self.start_enter))]
             goal = self.goal_enter[np.random.randint(len(self.goal_enter))]
+            # -- 目的地が中間地点であるか、スタート位置が中間地点であるか --
+            middle = goal in self.middle_goals or start_position in self.start_middle
+            middle_position = self.middle_positions[np.random.randint(len(self.middle_positions))] if middle else None
             color = "blue"
         else:
             start_position = self.start_exit[np.random.randint(len(self.start_exit))]
             goal = self.goal_exit[np.random.randint(len(self.goal_exit))]
+            # -- 目的地が中間地点であるか、スタート位置が中間地点であるか --
+            middle = goal in self.middle_goals or start_position in self.start_middle
+            middle_position = self.middle_positions[np.random.randint(len(self.middle_positions))] if middle else None
             color = "red"
         
-        self.agents.append(Agent(start_position, goal, color, futinobe))
+        self.agents.append(Agent(start_position, goal, color, futinobe, middle, middle_position))
 
     def update(self):
         for agent in self.agents:
             agent.update(self.agents, self.walls)
-     
+        # -- 到着エージェントの削除 --
         self.agents = [agent for agent in self.agents if np.linalg.norm(agent.position - agent.goal) > 15]
         if np.random.rand() < BORN_RATE:  # 確率で新しいエージェントを生成
             self.born_agent()
@@ -147,6 +184,10 @@ class Simulation:
         for wall in self.fake_walls:
             # ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1]))
             ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1],fc="r"))
+
+        # 中間地点の描画
+        for middle in self.middle_positions:
+            ax.plot(middle[0], middle[1], 'g*', markersize=10)
 
         # 目的地の描画
         for dest in self.goal_enter:
@@ -177,8 +218,7 @@ sim = Simulation(500, 500)
 # 壁の追加
 sim.add_wall(0, 0, 30, 500) # 左
 sim.add_wall(485, 0, 500, 500) # 右
-sim.add_wall(0, 450, 290, 500) # 上
-sim.add_wall(290, 480, 500, 500) # 上
+sim.add_wall(0, 450, 500, 500) # 上
 sim.add_wall(0, 0, 500, 150) # 下
 sim.add_wall(0, 0, 300, 300) # 左下
 
@@ -189,26 +229,24 @@ sim.add_wall(220, 400, 230, 450)
 sim.add_wall(210, 410, 220, 450)
 sim.add_wall(200, 420, 210, 450)
 sim.add_wall(190, 430, 200, 450)
-
-
 sim.add_wall(50, 300, 150, 320)
 
 # フェイク壁
 sim.add_fake_wall(475, 0, 500, 500)
 sim.add_fake_wall(30,300, 50, 450)
 sim.add_fake_wall(290, 370, 300, 450)
-# 追加
-sim.add_fake_wall(290, 450, 500, 480) # 上
 
 # スタート位置の追加
-# --- futinobe 淵野辺民
+# --- futinobe 淵野辺民 
 sim.add_start_position(470, 200, True)
 sim.add_start_position(470, 220, True)
 sim.add_start_position(470, 240, True)
 
-
-sim.add_start_position(55, 440, False) 
-sim.add_start_position(55, 420, False) 
+# 階段(奥)
+sim.add_start_position(55, 440, False, True)
+sim.add_start_position(55, 430, False, True)
+sim.add_start_position(55, 420, False, True) 
+sim.add_start_position(55, 410, False, True)
 
 # エスカレーター(上り)
 sim.add_start_position(310, 440, False) 
@@ -220,6 +258,7 @@ sim.add_start_position(470, 420, False)
 sim.add_start_position(470, 400, False) 
 sim.add_start_position(470, 380, False) 
 
+# ------------------------------
 
 # 目的地(確率あり）
 sim.add_goal(470, 260, 0.1, False)  # 40%の確率
@@ -227,13 +266,25 @@ sim.add_goal(470, 280, 0.1, False)
 sim.add_goal(470, 300, 0.2, False)
 sim.add_goal(470, 320, 0.2, False)
 
-sim.add_goal(55, 400, 0.1, True) 
-sim.add_goal(55, 380, 0.1, True) 
+# 階段(奥)
+sim.add_goal(55, 400, 0.1, True, True) 
+sim.add_goal(55, 390, 0.1, True, True)
+sim.add_goal(55, 380, 0.1, True, True)
+sim.add_goal(55, 370, 0.1, True, True)
 
 # エスカレーター(下り)
 sim.add_goal(310, 400, 0.1, True) 
 sim.add_goal(310, 380, 0.1, True) 
 
+# ------------------------------
+
+# 中間地点
+sim.add_middle_position(300, 310)
+sim.add_middle_position(300, 320)
+sim.add_middle_position(300, 330)
+sim.add_middle_position(300, 340)
+sim.add_middle_position(300, 350)
+sim.add_middle_position(300, 360)
 
 
 # 初期エージェントの生成
