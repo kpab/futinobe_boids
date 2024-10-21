@@ -17,6 +17,8 @@ YASASISA = 0.08 # 人回避の重み
 AVOID_WALL_WEIGHT = 0.05 # 壁回避の重み
 FUTINOBE_RATE = 0.2
 
+perfect_fake = True
+
 class Agent:
     def __init__(self, position, goal, color, futinobe, middle, middle_position=None):
         self.position = np.array(position, dtype=float)
@@ -179,7 +181,7 @@ class Simulation:
             agent.update(self.agents, self.walls)
         # -- 到着エージェントの削除 --
         self.agents = [agent for agent in self.agents if np.linalg.norm(agent.position - agent.goal) > 15]
-        if np.random.rand() < BORN_RATE:  # 確率で新しいエージェントを生成
+        if np.random.rand() < BORN_RATE: # 生成
             self.born_agent()
 
     def animate(self, num_frames):
@@ -192,8 +194,10 @@ class Simulation:
             ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1]))
 
         for wall in self.fake_walls:
-            # ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1]))
-            ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1],fc="r"))
+            if perfect_fake:
+                ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1]))
+            else:
+                ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1],fc="r"))
 
         # 中間地点の描画
         for middle in self.middle_positions:
@@ -228,7 +232,8 @@ sim = Simulation(500, 500)
 # 壁の追加
 sim.add_wall(0, 0, 30, 500) # 左
 sim.add_wall(485, 0, 500, 500) # 右
-sim.add_wall(0, 450, 500, 500) # 上
+sim.add_wall(0, 450, 290, 500) # 上
+sim.add_wall(290, 480, 500, 500) # 上
 sim.add_wall(0, 0, 500, 150) # 下
 sim.add_wall(0, 0, 300, 300) # 左下
 
@@ -245,6 +250,7 @@ sim.add_wall(50, 300, 150, 320)
 sim.add_fake_wall(475, 0, 500, 500)
 sim.add_fake_wall(30,300, 50, 450)
 sim.add_fake_wall(290, 370, 300, 450)
+sim.add_fake_wall(290, 450, 500, 480) # 上
 
 # スタート位置の追加
 # --- futinobe 淵野辺民 
