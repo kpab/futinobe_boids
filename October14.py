@@ -1,5 +1,5 @@
 '''
-右階段に中間地点
+右階段ユーザーの中間地点
 '''
 import numpy as np
 import matplotlib.pyplot as plt
@@ -54,7 +54,7 @@ class Agent:
         
         # 位置の更新
         self.position += self.velocity
-        # 目的地に近づいたら速度を減少させる
+          # 目的地に近づいたら速度を減少させる
         if np.linalg.norm(self.position - self.goal) < 20:
             self.velocity *= 0.5  # 目的地に近づいたらスピードを落とす
         
@@ -94,20 +94,22 @@ class Simulation:
         self.walls = []
         self.fake_walls = []
         self.start_positions = []
-        self.start_enter_position_weights = []
+        self.start_enter_position_weights = [] # スタート地点の確率を反映
         self.start_exit_position_weights = []
         self.start_enter = []
         self.start_exit = []
         self.start_middle = [] # 中間地点が必要なスタート位置
+        self.start_middle_v2 = [] # 右階段利用淵野辺ワーカー
         self.goals = []
         self.goal_enter_position_weights = []
         self.goal_exit_position_weights = []
         self.middle_goals = [] # 中間地点が必要な目的地
-        self.middle_positions = [] # 中間地点
+        self.middle_goals_v2 = [] # 右階段利用淵野辺民
+        self.middle_positions = [] # 中間地点(右)
+        self.middle_positions_v2 = [] # 中間地点(左)
         self.goal_enter = []
         self.goal_exit = []
         self.colors = ['red', 'blue', 'green', 'pink', 'purple']
-
 
     # 壁
     def add_wall(self, x1, y1, x2, y2):
@@ -118,7 +120,7 @@ class Simulation:
         self.fake_walls.append((x1, y1, x2, y2))
 
     # スタート位置
-    def add_start_position(self, x, y, weight, futinobe, middle=False):
+    def add_start_position(self, x, y, weight, futinobe, middle=False, middle_2=False):
         self.start_positions.append((x, y))
         if futinobe:
             self.start_enter.append((x, y))
@@ -130,9 +132,11 @@ class Simulation:
                 self.start_exit_position_weights.append((x, y))
         if middle:
             self.start_middle.append((x, y))
+        if middle_2:
+            self.start_middle.append((x, y))
 
     # 目的地
-    def add_goal(self, x, y, weight, futinobe, middle=False):
+    def add_goal(self, x, y, weight, futinobe, middle=False, middle_2=False):
         self.goals.append((x, y))
         if futinobe:
             self.goal_enter.append((x, y))
@@ -144,10 +148,15 @@ class Simulation:
                 self.goal_exit_position_weights.append((x, y))
         if middle:
             self.middle_goals.append((x, y))
+        if middle_2:
+            self.middle_goals_v2.append((x, y))
 
     # 中間地点
-    def add_middle_position(self, x, y):
-        self.middle_positions.append((x, y))
+    def add_middle_position(self, x, y, Right=False):
+        if Right:
+            self.middle_positions_v2.append((x, y))
+        else:
+            self.middle_positions.append((x, y))
 
     # エージェントの生成
     def born_agent(self):
@@ -163,15 +172,30 @@ class Simulation:
             start_position = self.start_enter_position_weights[np.random.randint(len(self.start_enter_position_weights))]
             goal = self.goal_enter_position_weights[np.random.randint(len(self.goal_enter_position_weights))]
             # -- 目的地が中間地点であるか、スタート位置が中間地点であるか --
-            middle = goal in self.middle_goals or start_position in self.start_middle
-            middle_position = self.middle_positions[np.random.randint(len(self.middle_positions))] if middle else None
+            if goal in self.middle_goals or start_position in self.start_middle:
+                middle = True
+                middle_position = self.middle_positions[np.random.randint(len(self.middle_positions))]
+            elif goal in self.middle_goals_v2 or start_position in self.start_middle_v2:
+                middle = True
+                middle_position = self.middle_positions_v2[np.random.randint(len(self.middle_positions_v2))]
+            else:
+                middle = False
+                middle_position = None
+
             color = "blue"
         else:
             start_position = self.start_exit_position_weights[np.random.randint(len(self.start_exit_position_weights))]
             goal = self.goal_exit_position_weights[np.random.randint(len(self.goal_exit_position_weights))]
             # -- 目的地が中間地点であるか、スタート位置が中間地点であるか --
-            middle = goal in self.middle_goals or start_position in self.start_middle
-            middle_position = self.middle_positions[np.random.randint(len(self.middle_positions))] if middle else None
+            if goal in self.middle_goals or start_position in self.start_middle:
+                middle = True
+                middle_position = self.middle_positions[np.random.randint(len(self.middle_positions))]
+            elif goal in self.middle_goals_v2 or start_position in self.start_middle_v2:
+                middle = True
+                middle_position = self.middle_positions_v2[np.random.randint(len(self.middle_positions_v2))]
+            else:
+                middle = False
+                middle_position = None
             color = "red"
         
         self.agents.append(Agent(start_position, goal, color, futinobe, middle, middle_position))
@@ -201,6 +225,8 @@ class Simulation:
 
         # 中間地点の描画
         for middle in self.middle_positions:
+            ax.plot(middle[0], middle[1], 'g*', markersize=10)
+        for middle in self.middle_positions_v2:
             ax.plot(middle[0], middle[1], 'g*', markersize=10)
 
         # 目的地の描画
@@ -253,11 +279,13 @@ sim.add_fake_wall(290, 370, 300, 450)
 sim.add_fake_wall(290, 450, 500, 480) # 上
 
 # スタート位置の追加
-# --- futinobe 淵野辺民 
-sim.add_start_position(470, 200, 1, True)
-sim.add_start_position(470, 220, 1, True)
-sim.add_start_position(470, 240, 2, True)
+### add_start_position(x, y, weight, futinobe, middle, middle_2)
+# --- futinobe person ---
+sim.add_start_position(470, 200, 1, True, False)
+sim.add_start_position(470, 220, 1, True, False)
+sim.add_start_position(470, 240, 2, True, False)
 
+# --- futinobe worker ---
 # 階段(奥)
 sim.add_start_position(55, 440, 1, False, True)
 sim.add_start_position(55, 430, 1, False, True)
@@ -269,16 +297,16 @@ sim.add_start_position(310, 440, 5, False)
 sim.add_start_position(310, 420, 5, False) 
 
 # 階段(右)
-sim.add_start_position(470, 440, 1, False)
-sim.add_start_position(470, 430, 1, False)
-sim.add_start_position(470, 420, 1, False) 
-sim.add_start_position(470, 410, 1, False) 
-sim.add_start_position(470, 400, 1, False) 
-sim.add_start_position(470, 390, 1, False) 
-sim.add_start_position(470, 380, 1, False) 
+sim.add_start_position(470, 440, 1, False, False, True)
+sim.add_start_position(470, 430, 1, False, False, True)
+sim.add_start_position(470, 420, 1, False, False, True) 
+sim.add_start_position(470, 410, 1, False, False, True) 
+sim.add_start_position(470, 400, 1, False, False, True) 
+sim.add_start_position(470, 390, 1, False, False, True) 
+sim.add_start_position(470, 380, 1, False, False, True) 
 
 # ------------------------------
-
+### add_goal(x, y, weight, futinobe, middle, middle_2)
 # 目的地(確率あり）
 sim.add_goal(470, 260, 1, False)  # 40%の確率
 sim.add_goal(470, 280, 1, False)
@@ -286,13 +314,13 @@ sim.add_goal(470, 300, 2, False)
 sim.add_goal(470, 320, 2, False)
 
 # 階段(右)
-sim.add_goal(470, 440, 1, True)
-sim.add_goal(470, 430, 1, True)
-sim.add_goal(470, 420, 1, True)
-sim.add_goal(470, 410, 1, True) 
-sim.add_goal(470, 400, 1, True) 
-sim.add_goal(470, 390, 1, True) 
-sim.add_goal(470, 380, 1, True) 
+sim.add_goal(470, 440, 1, True, False, True)
+sim.add_goal(470, 430, 1, True, False, True)
+sim.add_goal(470, 420, 1, True, False, True)
+sim.add_goal(470, 410, 1, True, False, True) 
+sim.add_goal(470, 400, 1, True, False, True) 
+sim.add_goal(470, 390, 1, True, False, True) 
+sim.add_goal(470, 380, 1, True, False, True) 
 
 # 階段(奥)
 sim.add_goal(55, 400, 1, True, True) 
@@ -305,14 +333,21 @@ sim.add_goal(310, 400, 1, True)
 sim.add_goal(310, 380, 1, True) 
 
 # ------------------------------
-
 # 中間地点
+## add_middle_position(x, y, Right=False)
 sim.add_middle_position(300, 310)
 sim.add_middle_position(300, 320)
 sim.add_middle_position(300, 330)
 sim.add_middle_position(300, 340)
 sim.add_middle_position(300, 350)
 sim.add_middle_position(300, 360)
+
+sim.add_middle_position(460, 370, True)
+sim.add_middle_position(455, 370, True)
+sim.add_middle_position(450, 370, True)
+sim.add_middle_position(445, 370, True)
+sim.add_middle_position(440, 370, True)
+sim.add_middle_position(435, 370, True)
 
 
 # 初期エージェントの生成
