@@ -1,0 +1,12 @@
+FRAME_COUNT = 500
+START_HUMAN_COUNT = 10 # 初期
+HITO_SIYA_LEVEL = 16.0 # 👁️
+WALL_SIYA_LEVEL = 16.0 # 👁️
+MAX_SPEED = 3.0 # 🦵
+BORN_RATE = 1
+SEKKATI = 0.3
+YASASISA = 0.08 # 人回避の重み
+AVOID_WALL_WEIGHT = 0.05 # 壁回避の重み
+FUTINOBE_RATE = 0.2
+
+perfect_fake = True
