@@ -9,4 +9,4 @@ YASASISA = 0.08 # 人回避の重み
 AVOID_WALL_WEIGHT = 0.05 # 壁回避の重み
 FUTINOBE_RATE = 0.2
 
-perfect_fake = True
+perfect_fake = False
