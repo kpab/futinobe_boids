@@ -10,3 +10,5 @@ AVOID_WALL_WEIGHT = 0.05 # 壁回避の重み
 FUTINOBE_RATE = 0.2
 
 perfect_fake = False
+
+slowing_range = 100

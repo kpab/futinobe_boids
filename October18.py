@@ -1,5 +1,5 @@
 '''
-レイアウトの変更
+目的地に近づくほど減速
 '''
 from modules.Constants import *
 from modules.Simulation import Simulation
@@ -9,7 +9,6 @@ sim = Simulation(500, 500)
 
 # 壁の追加
 sim.add_wall(0, 0, 30, 500) # 左
-# sim.add_wall(485, 0, 500, 500) # 右
 sim.add_wall(480, 360, 500, 500) # 右
 sim.add_wall(0, 450, 290, 500) # 上
 sim.add_wall(290, 480, 500, 500) # 上

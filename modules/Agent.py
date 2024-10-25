@@ -1,3 +1,7 @@
+'''
+10/24 目的地に近づくほど減速
+'''
+
 import numpy as np
 from modules.Constants import *
 
@@ -24,7 +28,7 @@ class Agent:
         else:
             sekkati_level_velocity = (self.goal - self.position)
         if np.linalg.norm(sekkati_level_velocity) > 0:
-            sekkati_level_velocity = sekkati_level_velocity / np.linalg.norm(sekkati_level_velocity) * self.max_speed
+            sekkati_level_velocity = sekkati_level_velocity / np.linalg.norm(sekkati_level_velocity) * self.max_speed 
         
         # 衝突回避力（他のエージェントと壁）
         human_avoid_power, wall_avoid_power = self.impact_avoid(agents, walls)
@@ -37,8 +41,8 @@ class Agent:
         # 位置の更新
         self.position += self.velocity
           # 目的地に近づいたら速度を減少させる
-        if np.linalg.norm(self.position - self.goal) < 20:
-            self.velocity *= 0.5  # 目的地に近づいたらスピードを落とす
+        if np.linalg.norm(self.position - self.goal) < slowing_range:
+            self.velocity *= (np.linalg.norm(self.position - self.goal) / slowing_range)  # 目的地に近づいたらスピードを落とす
         
         # 中間地点に着いたら目的地を変更
         if self.middle and self.middle_position is not None:
