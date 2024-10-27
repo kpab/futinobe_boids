@@ -141,10 +141,11 @@ class Simulation:
                 ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1],fc="r"))
 
         # 中間地点の描画
-        for middle in self.middle_positions:
-            ax.plot(middle[0], middle[1], 'g*', markersize=10)
-        for middle in self.middle_positions_v2:
-            ax.plot(middle[0], middle[1], 'g*', markersize=10)
+        if not perfect_fake:
+            for middle in self.middle_positions:
+                ax.plot(middle[0], middle[1], 'g*', markersize=10)
+            for middle in self.middle_positions_v2:
+                ax.plot(middle[0], middle[1], 'g*', markersize=10)
 
         # 目的地の描画
         for dest in self.goal_enter:

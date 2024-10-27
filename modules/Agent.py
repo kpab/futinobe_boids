@@ -1,6 +1,8 @@
 '''
 10/24 目的地に近づくほど減速
+10/27 中間地点認識範囲(middle_range)
 10/27 目的地に近づくほど減速(slow_levelの実装)
+
 '''
 
 import numpy as np
@@ -43,11 +45,11 @@ class Agent:
         self.position += self.velocity
           # 目的地に近づいたら速度を減少させる
         if np.linalg.norm(self.position - self.goal) < slowing_range:
-            self.velocity *= (np.linalg.norm(self.position - self.goal) / slowing_range)  # 目的地に近づいたらスピードを落とす
+            self.velocity *= (np.linalg.norm(self.position - self.goal))/(slowing_range * slow_level) # 目的地に近づいたらスピードを落とす
         
         # 中間地点に着いたら目的地を変更
         if self.middle and self.middle_position is not None:
-            if np.linalg.norm(self.position - self.middle_position) < 20:
+            if np.linalg.norm(self.position - self.middle_position) < MIDDLE_RANGE:
                 self.middle_position = None
 
     def impact_avoid(self, agents, walls):

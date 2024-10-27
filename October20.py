@@ -1,24 +1,9 @@
 '''
 減速効果修正
 - 減速レベルの制御
-- 減速する目的地の限定(淵野辺民エスカレーターuser & 淵野辺ワーカー全て)
 '''
 from modules.Simulation import Simulation
-FRAME_COUNT = 500
-START_HUMAN_COUNT = 10 # 初期
-HITO_SIYA_LEVEL = 16.0 # 👁️
-WALL_SIYA_LEVEL = 16.0 # 👁️
-MAX_SPEED = 2.0 # 🦵
-BORN_RATE = 1
-SEKKATI = 0.3
-YASASISA = 0.08 # 人回避の重み
-AVOID_WALL_WEIGHT = 0.15 # 壁回避の重み
-FUTINOBE_RATE = 0.2
-
-perfect_fake = False
-
-slowing_range = 50
-slow_level = 2
+from modules.Constants import *
 
 # シミュレーションの設定
 sim = Simulation(500, 500)
@@ -112,15 +97,14 @@ sim.add_middle_position(300, 350)
 sim.add_middle_position(300, 360)
 
 
-sim.add_middle_position(425, 370, True)
-sim.add_middle_position(420, 370, True)
-sim.add_middle_position(415, 370, True)
-sim.add_middle_position(410, 370, True)
-sim.add_middle_position(405, 370, True)
-sim.add_middle_position(400, 370, True)
-sim.add_middle_position(395, 370, True)
-sim.add_middle_position(390, 370, True)
-sim.add_middle_position(385, 370, True)
+sim.add_middle_position(420, 350, True)
+sim.add_middle_position(415, 350, True)
+sim.add_middle_position(410, 350, True)
+sim.add_middle_position(405, 350, True)
+sim.add_middle_position(400, 350, True)
+sim.add_middle_position(395, 350, True)
+sim.add_middle_position(390, 350, True)
+sim.add_middle_position(385, 350, True)
 
 
 
