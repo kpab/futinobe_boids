@@ -23,6 +23,7 @@ sim.add_wall(210, 410, 220, 450)
 sim.add_wall(200, 420, 210, 450)
 sim.add_wall(190, 430, 200, 450)
 sim.add_wall(50, 300, 150, 320)
+sim.add_wall(495, 0, 500, 500)
 
 # フェイク壁
 # sim.add_fake_wall(475, 0, 500, 500)
