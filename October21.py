@@ -1,12 +1,12 @@
 '''
-減速効果修正
-- 減速レベルの制御
+結果の出力(ヒートマップ)
 '''
 from modules.Simulation import Simulation
 from modules.Constants import *
 
+
 # シミュレーションの設定
-sim = Simulation(500, 500)
+sim = Simulation(WIDTH, HEIGHT)
 
 # 壁の追加
 sim.add_wall(0, 0, 30, 500) # 左

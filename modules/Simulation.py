@@ -4,6 +4,8 @@ from matplotlib.animation import FuncAnimation
 from matplotlib.patches import Rectangle
 from modules.Constants import *
 from modules.Agent import Agent
+from modules.Result import *
+
 class Simulation:
     def __init__(self, width, height):
         self.width = width
@@ -118,6 +120,9 @@ class Simulation:
         self.agents.append(Agent(start_position, goal, color, futinobe, middle, middle_position))
 
     def update(self):
+        # -- 現在地リスト格納 --
+        ChkAgentPos(now_agents_positions, self.agents)
+
         for agent in self.agents:
             agent.update(self.agents, self.walls)
         # -- 到着エージェントの削除 --
@@ -169,3 +174,5 @@ class Simulation:
 
         anim = FuncAnimation(fig, update, frames=num_frames, interval=50, blit=True)
         plt.show()
+        Heatmapping(now_agents_positions, self.walls)
+
