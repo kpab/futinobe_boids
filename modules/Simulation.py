@@ -5,6 +5,7 @@ from matplotlib.patches import Rectangle
 from modules.Constants import *
 from modules.Agent import Agent
 from modules.Result import *
+from modules.Constants import *
 
 class Simulation:
     def __init__(self, width, height):
@@ -30,6 +31,7 @@ class Simulation:
         self.goal_enter = []
         self.goal_exit = []
         self.colors = ['red', 'blue', 'green', 'pink', 'purple']
+        self.goaled_agents = []
 
     # 壁
     def add_wall(self, x1, y1, x2, y2):
@@ -120,13 +122,20 @@ class Simulation:
         self.agents.append(Agent(start_position, goal, color, futinobe, middle, middle_position))
 
     def update(self):
+        global now_frame
+        now_frame += 1
         # -- 現在地リスト格納 --
         ChkAgentPos(now_agents_positions, self.agents)
 
-        for agent in self.agents:
+        for agent in self.agents: # 位置こーしん
             agent.update(self.agents, self.walls)
+
         # -- 到着エージェントの削除 --
-        self.agents = [agent for agent in self.agents if np.linalg.norm(agent.position - agent.goal) > 15]
+        for agent in self.agents:
+            if np.linalg.norm(agent.position - agent.goal) < 15:
+                self.agents.remove(agent)
+                if now_frame > SKIP_RESULT_COUNT:
+                    self.goaled_agents.append(agent)
         if np.random.rand() < BORN_RATE: # 生成
             self.born_agent()
 
@@ -175,4 +184,5 @@ class Simulation:
         anim = FuncAnimation(fig, update, frames=num_frames, interval=50, blit=True)
         plt.show()
         Heatmapping(now_agents_positions, self.walls)
+        SayResult(now_frame, self.goaled_agents)
 

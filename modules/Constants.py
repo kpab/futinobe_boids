@@ -13,6 +13,9 @@ WIDTH = 500
 HEIGHT = 500
 WIDTH_HEATMAP = int(WIDTH/10)
 HEIGHT_HEATMAP = int(HEIGHT/10)
+now_frame = 0 # 現在のフレーム数
+SKIP_RESULT_COUNT = 10 # 結果にカウントしないフレーム数
+
 
 perfect_fake = False # やる
 
