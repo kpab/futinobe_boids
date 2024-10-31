@@ -47,17 +47,17 @@ def Heatmapping(now_agents_positions, walls):
     fig, ax = plt.subplots(figsize=(10, 10),
                            facecolor="gainsboro")
     
-    
     # plt.gca().invert_yaxis() # こいつ効いてない
-    ax.invert_yaxis() # こいつも
-    ax.invert_yaxis()
+   # ax.invert_yaxis() # こいつも
+    
     
     ax.set_xlim(0, WIDTH_HEATMAP)
-    # ax.set_ylim(0, HEIGHT_HEATMAP)
-    ax.set_ylim(HEIGHT_HEATMAP, 0) # こいつも
+    ax.set_ylim(0, HEIGHT_HEATMAP)
+    # ax.set_ylim(HEIGHT_HEATMAP, 0) # こいつも
     
     ax.set_title("~ヒートマップ~")
-    sns.heatmap(now_agents_positions, cmap='Greens',cbar=False)
+    ax2 = sns.heatmap(now_agents_positions, cmap='Greens',cbar=False)
     for wall in walls:
             ax.add_patch(Rectangle((wall[0]/10, wall[1]/10), (wall[2]-wall[0])/10, (wall[3]-wall[1])/10))
+    ax2.invert_yaxis()
     plt.show()

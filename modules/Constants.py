@@ -17,7 +17,7 @@ now_frame = 0 # 現在のフレーム数
 SKIP_RESULT_COUNT = 10 # 結果にカウントしないフレーム数
 
 
-perfect_fake = False # やる
+perfect_fake = True # やる
 
 
 slowing_range = 50 # 減速範囲(ゴール-現在地<slowing_rangeで減速)

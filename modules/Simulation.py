@@ -182,6 +182,7 @@ class Simulation:
             return scatter,
 
         anim = FuncAnimation(fig, update, frames=num_frames, interval=50, blit=True)
+        # ax.invert_yaxis()
         plt.show()
         Heatmapping(now_agents_positions, self.walls)
         SayResult(now_frame, self.goaled_agents)
