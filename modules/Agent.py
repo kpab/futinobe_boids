@@ -2,9 +2,9 @@
 10/24 目的地に近づくほど減速
 10/27 中間地点認識範囲(middle_range)
 10/27 目的地に近づくほど減速(slow_levelの実装)
-
+11/04 速度に幅を持たせる
 '''
-
+import random
 import numpy as np
 from modules.Constants import *
 
@@ -14,15 +14,24 @@ class Agent:
         self.velocity = np.zeros(2)
         self.goal = np.array(goal)
         self.color = color
-        self.max_speed = MAX_SPEED
+        # -- 最高速度設定 --
+        if random.random() < MAX_MAX_SPEED[1]:
+            self.max_speed= MAX_MAX_SPEED[0]  # 上振れ速度に設定
+        elif random.random() < MIN_MAX_SPEED[1]:
+            self.max_speed = MIN_MAX_SPEED[0]  # 下振れ速度に設定
+        else:
+            self.max_speed = MAX_SPEED  # 通常の最高速度にリセット
+
         self.hitosiya = HITO_SIYA_LEVEL
         self.wallsiya = WALL_SIYA_LEVEL
         self.futinobe = futinobe
         self.middle = middle
+        self.frame = 0 # フレーム
         if middle:
             self.middle_position = middle_position
         else:
             self.middle_position = None
+        self.total_speed = 0
 
     def update(self, agents, walls):
         # 目的地に向かう力
@@ -43,6 +52,10 @@ class Agent:
         
         # 位置の更新
         self.position += self.velocity
+        # フレームの更新
+        self.frame += 1
+        self.total_speed += np.linalg.norm(self.velocity)
+
           # 目的地に近づいたら速度を減少させる
         if np.linalg.norm(self.position - self.goal) < slowing_range:
             self.velocity *= (np.linalg.norm(self.position - self.goal))/(slowing_range * slow_level) # 目的地に近づいたらスピードを落とす

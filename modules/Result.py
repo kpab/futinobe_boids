@@ -1,3 +1,7 @@
+'''
+11/4 平均速度の出力
+'''
+
 import math
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -15,6 +19,7 @@ def ChkAgentPos(now_agents_positions, agents):
     return now_agents_positions
 
 def SayResult(frame, total_goaled_agents):
+    agents_average_speed = 0
     print("frame: ",frame)
     if frame <=  SKIP_RESULT_COUNT:
         print("残念!!今回の結果は全てスキップされました")
@@ -31,8 +36,10 @@ def SayResult(frame, total_goaled_agents):
             futinobe_goaled_count += 1
         else:
             worker_goaled_count += 1
+        agents_average_speed += agent.total_speed/agent.frame
     print(f"総脱出数: {len(total_goaled_agents)}人")
     print(f"脱出数/f: {round(len(total_goaled_agents)/(frame-SKIP_RESULT_COUNT+1), 3)}") # まるめてる
+    print(f"平均速度: {round(agents_average_speed/len(total_goaled_agents), 3)}") # marumaru
     print(f"淵野辺民: {futinobe_goaled_count}\n淵野辺ワーカー: {worker_goaled_count}")
     if futinobe_goaled_count>worker_goaled_count:
         print("今回は淵野辺民の勝ちーーーー!!!")
@@ -41,6 +48,8 @@ def SayResult(frame, total_goaled_agents):
              
 
 
+
+# -- ヒートマップ --
 def Heatmapping(now_agents_positions, walls):
     # print(now_agents_positions)
     
