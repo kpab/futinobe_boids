@@ -6,6 +6,7 @@ from modules.Constants import *
 from modules.Agent import Agent
 from modules.Result import *
 from modules.Constants import *
+import sys
 
 class Simulation:
     def __init__(self, width, height):
@@ -123,7 +124,12 @@ class Simulation:
 
     def update(self):
         global now_frame
-        now_frame += 1
+
+        if now_frame >= FRAME_COUNT:
+            # sys.exit()
+            return
+        else:
+            now_frame += 1
         # -- 現在地リスト格納 --
         ChkAgentPos(now_agents_positions, self.agents)
 
@@ -176,6 +182,8 @@ class Simulation:
         scatter = ax.scatter([], [], c=[])
 
         def update(frame):
+            # if frame>FRAME_COUNT:
+            #     return
             self.update()
             scatter.set_offsets(np.array([agent.position for agent in self.agents]))
             scatter.set_color([agent.color for agent in self.agents])

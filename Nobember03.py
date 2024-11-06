@@ -1,5 +1,6 @@
 '''
 レイアウト調整
+フレーム制御
 '''
 from modules.Simulation import Simulation
 from modules.Constants import *
