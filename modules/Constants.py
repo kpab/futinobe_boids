@@ -20,7 +20,7 @@ MAX_SPEED = 3.0 # 🦵
 MAX_MAX_SPEED = [4.0, 0.2] # 上振れ最高速度, 確率
 MIN_MAX_SPEED = [2.0, 0.2] # 下振れ最高速度, 確率
 
-perfect_fake = True # やる
+perfect_fake = False # やる
 
 
 slowing_range = 50 # 減速範囲(ゴール-現在地<slowing_rangeで減速)
