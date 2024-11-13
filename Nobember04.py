@@ -1,6 +1,5 @@
 '''
-レイアウト調整
-フレーム制御
+最大人口密度出力
 '''
 from modules.Simulation import Simulation
 from modules.Constants import *

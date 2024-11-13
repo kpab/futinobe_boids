@@ -2,10 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.patches import Rectangle
-from modules.Constants_morning import *
+from modules.Constants import *
 from modules.Agent import Agent
 from modules.Result import *
-from modules.Constants_morning import *
+from modules.Constants import *
 import sys
 
 class Simulation:
@@ -33,7 +33,6 @@ class Simulation:
         self.goal_exit = []
         self.colors = ['red', 'blue', 'green', 'pink', 'purple']
         self.goaled_agents = []
-
 
     # 壁
     def add_wall(self, x1, y1, x2, y2):
@@ -143,16 +142,13 @@ class Simulation:
                 self.agents.remove(agent)
                 if now_frame > SKIP_RESULT_COUNT:
                     self.goaled_agents.append(agent)
-
-        for _ in range(2):
-            if np.random.rand() < BORN_RATE: # 生成
-                self.born_agent()
+        if np.random.rand() < BORN_RATE: # 生成
+            self.born_agent()
 
     def animate(self, num_frames):
         fig, ax = plt.subplots(figsize=(10, 10))
         ax.set_xlim(0, self.width)
         ax.set_ylim(0, self.height)
-        text = ax.text(250, 520, 0, ha='center')
 
         # 壁の描画
         for wall in self.walls:
@@ -188,22 +184,13 @@ class Simulation:
         def update(frame):
             # if frame>FRAME_COUNT:
             #     return
-            # print(np.array([agent.position for agent in self.agents]))
             self.update()
-            # scatter.set_offsets(np.array([agent.position for agent in self.agents]))
-            scatter.set_offsets([agent.position for agent in self.agents])
-            # scatter.set_offsets(np.array([agent.position[:2] for agent in self.agents]))
-            # scatter.set_offsets(np.array([np.squeeze(agent.position) for agent in self.agents]))
-
-
+            scatter.set_offsets(np.array([agent.position for agent in self.agents]))
             scatter.set_color([agent.color for agent in self.agents])
-            text.set_text(now_frame)
-            
             return scatter,
 
-        anim = FuncAnimation(fig, update, frames=num_frames, interval=50, blit=False)
+        anim = FuncAnimation(fig, update, frames=num_frames, interval=50, blit=True)
         # ax.invert_yaxis()
         plt.show()
         Heatmapping(now_agents_positions, self.walls)
         SayResult(now_frame, self.goaled_agents)
-

@@ -6,11 +6,13 @@
 '''
 import random
 import numpy as np
-from modules.Constants import *
+from modules.Constants_morning import *
 
 class Agent:
     def __init__(self, position, goal, color, futinobe, middle=False, middle_position=None):
         self.position = np.array(position, dtype=float)
+        # self.position = np.array(position, dtype=float).reshape(1, 2)
+
         self.velocity = np.zeros(2)
         self.goal = np.array(goal)
         self.color = color
@@ -32,6 +34,7 @@ class Agent:
         else:
             self.middle_position = None
         self.total_speed = 0
+        
 
     def update(self, agents, walls):
         # 目的地に向かう力
@@ -52,6 +55,7 @@ class Agent:
         
         # 位置の更新
         self.position += self.velocity
+        
         # フレームの更新
         self.frame += 1
         self.total_speed += np.linalg.norm(self.velocity)

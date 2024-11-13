@@ -1,10 +1,8 @@
 '''
-レイアウト調整
-フレーム制御
+朝ラッシュの設定
 '''
 from modules.Simulation import Simulation
-from modules.Constants import *
-
+from modules.Constants_morning import *
 
 # シミュレーションの設定
 sim = Simulation(WIDTH, HEIGHT)
@@ -54,22 +52,22 @@ sim.add_start_position(490, 240, 1, True, False)
 
 # --- futinobe worker ---
 # 階段(奥)
-sim.add_start_position(55, 440, 2, False, True)
-sim.add_start_position(55, 430, 2, False, True)
-sim.add_start_position(55, 420, 2, False, True) 
-sim.add_start_position(55, 410, 2, False, True)
+sim.add_start_position(55, 440, 3, False, True)
+sim.add_start_position(55, 430, 3, False, True)
+sim.add_start_position(55, 420, 3, False, True) 
+sim.add_start_position(55, 410, 3, False, True)
 
 # エスカレーター(上り)
 sim.add_start_position(310, 440, 3, False) 
 sim.add_start_position(310, 420, 3, False) 
 
-# 階段(右)
+# 階段(手前)
 sim.add_start_position(420, 440, 1, False, middle_2=True)
-sim.add_start_position(420, 430, 1, False, middle_2=True)
-sim.add_start_position(420, 420, 1, False, middle_2=True) 
-sim.add_start_position(420, 410, 1, False, middle_2=True) 
-sim.add_start_position(420, 400, 1, False, middle_2=True) 
-sim.add_start_position(420, 390, 1, False, middle_2=True) 
+sim.add_start_position(420, 430, 2, False, middle_2=True)
+sim.add_start_position(420, 420, 2, False, middle_2=True) 
+sim.add_start_position(420, 410, 2, False, middle_2=True) 
+sim.add_start_position(420, 400, 2, False, middle_2=True) 
+sim.add_start_position(420, 390, 2, False, middle_2=True) 
 sim.add_start_position(420, 380, 1, False, middle_2=True) 
 
 # ------------------------------
@@ -82,12 +80,12 @@ sim.add_goal(490, 320, 1, False)
 
 # 階段(右)
 sim.add_goal(420, 440, 1, True, False, True)
-sim.add_goal(420, 430, 1, True, False, True)
-sim.add_goal(420, 420, 1, True, False, True)
-sim.add_goal(420, 410, 1, True, False, True) 
-sim.add_goal(420, 400, 1, True, False, True) 
-sim.add_goal(420, 390, 1, True, False, True) 
-sim.add_goal(420, 380, 1, True, False, True) 
+# sim.add_goal(420, 430, 1, True, False, True)
+# sim.add_goal(420, 420, 1, True, False, True)
+# sim.add_goal(420, 410, 1, True, False, True) 
+# sim.add_goal(420, 400, 1, True, False, True) 
+# sim.add_goal(420, 390, 1, True, False, True) 
+# sim.add_goal(420, 380, 1, True, False, True) 
 
 # 階段(奥)
 sim.add_goal(55, 400, 2, True, True) 
@@ -96,8 +94,8 @@ sim.add_goal(55, 380, 2, True, True)
 sim.add_goal(55, 370, 2, True, True)
 
 # エスカレーター(下り)
-sim.add_goal(310, 400, 1, True) 
-sim.add_goal(310, 380, 1, True) 
+sim.add_goal(310, 400, 2, True) 
+sim.add_goal(310, 380, 2, True) 
 
 # ------------------------------
 # 中間地点
