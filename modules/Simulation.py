@@ -205,5 +205,6 @@ class Simulation:
         # ax.invert_yaxis()
         plt.show()
         Heatmapping(now_agents_positions, self.walls)
+        HeatmappingNumber(now_agents_positions, self.walls)
         SayResult(now_frame, self.goaled_agents)
 

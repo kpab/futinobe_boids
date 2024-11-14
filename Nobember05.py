@@ -10,6 +10,7 @@ sim = Simulation(WIDTH, HEIGHT)
 
 # sim.add_wall(400, 340, 410, 350)
 # 壁の追加
+
 sim.add_wall(0, 0, 30, 500) # 左
 sim.add_wall(430, 360, 500, 500) # 右
 sim.add_wall(0, 450, 290, 500) # 上

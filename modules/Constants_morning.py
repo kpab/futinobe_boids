@@ -1,5 +1,5 @@
-FRAME_COUNT = 1100
-SKIP_RESULT_COUNT = 100 # 結果にカウントしないフレーム数
+FRAME_COUNT = 300
+SKIP_RESULT_COUNT = 0 # 結果にカウントしないフレーム数
 BORN_RATE = 0.8
 FUTINOBE_RATE = 0.2 # 淵野辺率
 
@@ -23,7 +23,7 @@ WIDTH_HEATMAP = int(WIDTH/10)
 HEIGHT_HEATMAP = int(HEIGHT/10)
 now_frame = 0 # 現在のフレーム数
 
-perfect_fake = False # やる
+perfect_fake = True # やる
 
 slowing_range = 30 # 減速範囲(ゴール-現在地<slowing_rangeで減速)
 slow_level = 20

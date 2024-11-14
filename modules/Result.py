@@ -1,6 +1,7 @@
 '''
 11/4 平均速度の出力
 11/13 最大人口密度出力
+11/14 数値表示ヒートマップの追加
 '''
 
 import math
@@ -69,3 +70,18 @@ def Heatmapping(now_agents_positions, walls):
     ax2.invert_yaxis()
     plt.show()
     print(f"最大人口密度: {np.amax(now_agents_positions)}")
+
+def HeatmappingNumber(now_agents_positions, walls):    
+    fig, ax = plt.subplots(figsize=(10, 10),
+                           facecolor="gainsboro")
+    
+    ax.set_xlim(0, WIDTH_HEATMAP)
+    ax.set_ylim(0, HEIGHT_HEATMAP)
+
+    
+    ax.set_title("~ヒートマップ~")
+    ax2 = sns.heatmap(now_agents_positions, cmap='Greens',cbar=False, annot=True, fmt='d', annot_kws={'fontsize':5})
+    for wall in walls:
+            ax.add_patch(Rectangle((wall[0]/10, wall[1]/10), (wall[2]-wall[0])/10, (wall[3]-wall[1])/10))
+    ax2.invert_yaxis()
+    plt.show()
