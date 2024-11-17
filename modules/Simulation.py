@@ -143,6 +143,21 @@ class Simulation:
                 self.agents.remove(agent)
                 if now_frame > SKIP_RESULT_COUNT:
                     self.goaled_agents.append(agent)
+                    continue
+            if agent.futinobe:
+                for g in self.goal_enter:
+                    if np.linalg.norm(agent.position - g) < 15:
+                        self.agents.remove(agent)
+                        if now_frame > SKIP_RESULT_COUNT:
+                            self.goaled_agents.append(agent)
+                        continue
+            else:
+                for g in self.goal_exit:
+                    if np.linalg.norm(agent.position - g) < 15:
+                        self.agents.remove(agent)
+                        if now_frame > SKIP_RESULT_COUNT:
+                            self.goaled_agents.append(agent)
+                        continue
 
         for _ in range(2):
             if np.random.rand() < BORN_RATE: # 生成
