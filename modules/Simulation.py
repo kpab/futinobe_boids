@@ -205,13 +205,9 @@ class Simulation:
             #     return
             # print(np.array([agent.position for agent in self.agents]))
             self.update()
-            # scatter.set_offsets(np.array([agent.position for agent in self.agents]))
-            scatter.set_offsets([agent.position for agent in self.agents])
-            # scatter.set_offsets(np.array([agent.position[:2] for agent in self.agents]))
-            # scatter.set_offsets(np.array([np.squeeze(agent.position) for agent in self.agents]))
-
-
-            scatter.set_color([agent.color for agent in self.agents])
+            if not HIDE:
+                scatter.set_offsets([agent.position for agent in self.agents])
+                scatter.set_color([agent.color for agent in self.agents])
             text.set_text(now_frame)
             
             return scatter,

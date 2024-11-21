@@ -2,6 +2,7 @@
 11/4 平均速度の出力
 11/13 最大人口密度出力
 11/14 数値表示ヒートマップの追加
+11/18 最大人口密度の座標取得
 '''
 
 import math
@@ -70,6 +71,9 @@ def Heatmapping(now_agents_positions, walls):
     ax2.invert_yaxis()
     plt.show()
     print(f"最大人口密度: {np.amax(now_agents_positions)}")
+    now_agents_positions = np.array(now_agents_positions)
+    max_point = np.unravel_index(np.argmax(now_agents_positions), now_agents_positions.shape)
+    print([max_point[1], max_point[0]])
 
 def HeatmappingNumber(now_agents_positions, walls):    
     fig, ax = plt.subplots(figsize=(10, 10),
