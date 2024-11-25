@@ -1,6 +1,5 @@
 '''
-目的地じゃなくても出れるなら削除
-これ基準のシミュレーション
+α1 淵野辺民の出口を奥階段に限定
 '''
 from modules.Simulation import Simulation
 from modules.Constants_morning import *
@@ -81,7 +80,7 @@ sim.add_goal(490, 300, 1, False)
 sim.add_goal(490, 320, 1, False)
 
 # 階段(右)
-sim.add_goal(420, 440, 1, True, False, True)
+# sim.add_goal(420, 440, 1, True, False, True)
 # sim.add_goal(420, 430, 1, True, False, True)
 # sim.add_goal(420, 420, 1, True, False, True)
 # sim.add_goal(420, 410, 1, True, False, True) 
@@ -96,8 +95,8 @@ sim.add_goal(55, 380, 2, True, True)
 sim.add_goal(55, 370, 2, True, True)
 
 # エスカレーター(下り)
-sim.add_goal(310, 400, 2, True) 
-sim.add_goal(310, 380, 2, True) 
+# sim.add_goal(310, 400, 2, True) 
+# sim.add_goal(310, 380, 2, True) 
 
 # ------------------------------
 # 中間地点

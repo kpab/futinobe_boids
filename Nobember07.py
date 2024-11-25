@@ -1,6 +1,5 @@
 '''
-目的地じゃなくても出れるなら削除
-これ基準のシミュレーション
+最大人口密度に壁
 '''
 from modules.Simulation import Simulation
 from modules.Constants_morning import *
@@ -38,6 +37,9 @@ sim.add_wall(200, 420, 210, 450)
 sim.add_wall(190, 430, 200, 450)
 sim.add_wall(50, 300, 150, 350)
 sim.add_wall(495, 0, 500, 500)
+
+# 追加障害物
+sim.add_wall(395, 350, 405, 360)
 
 # フェイク壁
 # sim.add_fake_wall(475, 0, 500, 500)
@@ -113,9 +115,10 @@ sim.add_middle_position(300, 350)
 # sim.add_middle_position(420, 350, True)
 # sim.add_middle_position(415, 350, True)
 sim.add_middle_position(410, 350, True)
-sim.add_middle_position(405, 350, True)
-sim.add_middle_position(400, 350, True)
-sim.add_middle_position(395, 350, True)
+# 消した
+# sim.add_middle_position(405, 350, True)
+# sim.add_middle_position(400, 350, True)
+# sim.add_middle_position(395, 350, True)
 sim.add_middle_position(390, 350, True)
 sim.add_middle_position(385, 350, True)
 

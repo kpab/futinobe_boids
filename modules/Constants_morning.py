@@ -23,8 +23,8 @@ WIDTH_HEATMAP = int(WIDTH/10)
 HEIGHT_HEATMAP = int(HEIGHT/10)
 now_frame = 0 # 現在のフレーム数
 
-perfect_fake = True # やる
-HIDE = False # 隠す
+perfect_fake = False # やる
+HIDE = True # 隠す
 
 slowing_range = 30 # 減速範囲(ゴール-現在地<slowing_rangeで減速)
 slow_level = 20
