@@ -95,6 +95,6 @@ def ChkTopFive(now_agents_positions):
     now_agents_positions = sum(now_agents_positions, [])
     list.sort(now_agents_positions, reverse=True) # こうじゅん
     top_five = []
-    for _ in range(4):
+    for _ in range(5):
         top_five.append(now_agents_positions.pop(0))
     print("上位5: ", top_five)
