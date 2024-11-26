@@ -178,13 +178,13 @@ class Simulation:
             ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1]))
 
         for wall in self.fake_walls:
-            if perfect_fake:
+            if PERFECT_FAKE:
                 ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1]))
             else:
                 ax.add_patch(Rectangle((wall[0], wall[1]), wall[2]-wall[0], wall[3]-wall[1],fc="r"))
 
         # 中間地点の描画
-        if not perfect_fake:
+        if not PERFECT_FAKE:
             for middle in self.middle_positions:
                 ax.plot(middle[0], middle[1], 'g*', markersize=10)
             for middle in self.middle_positions_v2:
@@ -220,7 +220,7 @@ class Simulation:
         # ax.invert_yaxis()
         plt.show()
 
-        with open("zzlog.txt", "a") as f:
+        with open(LOG_NAME, "a") as f:
             f.write("-------------------------------\n")
             f.write(f"記録: {datetime.datetime.now()}\n")
             f.write(f"{self.sim_name}\n")

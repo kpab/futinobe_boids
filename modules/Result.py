@@ -10,7 +10,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import japanize_matplotlib
 from matplotlib.patches import Rectangle
-from modules.Constants_morning import SKIP_RESULT_COUNT,WIDTH_HEATMAP,HEIGHT_HEATMAP
+from modules.Constants_morning import SKIP_RESULT_COUNT,WIDTH_HEATMAP,HEIGHT_HEATMAP, LOG_NAME
 import numpy as np
 import datetime
 
@@ -29,12 +29,12 @@ def SayResult(frame, total_goaled_agents):
     print("frame: ",frame)
     if frame <=  SKIP_RESULT_COUNT:
         print("残念!!今回の結果は全てスキップされました")
-        with open("zzlog.txt", "w") as f:
+        with open(LOG_NAME, "w") as f:
             print("残念!!今回の結果は全てスキップされました", file=f)
         return
     if len(total_goaled_agents) < 1:
         print("まだ誰も着いてないよ。もう少し待とう")
-        with open("zzlog.txt", "w") as f:
+        with open(LOG_NAME, "w") as f:
             print("まだ誰も着いてないよ。もう少し待とう", file=f)
         return
     futinobe_goaled_count = 0
@@ -61,7 +61,7 @@ def SayResult(frame, total_goaled_agents):
     else:
         print("今回は淵野辺ワーカーの勝ちーーーー!!!")
 
-    with open("zzlog.txt", "a") as f:
+    with open(LOG_NAME, "a") as f:
         for line in result:
             print(line, file=f)
              
@@ -88,7 +88,7 @@ def Heatmapping(now_agents_positions, walls):
     max_point = np.unravel_index(np.argmax(now_agents_positions), now_agents_positions.shape)
     result.append(f"最大通過地点: {[max_point[1], max_point[0]]}")
     print([max_point[1], max_point[0]])
-    with open("zzlog.txt", "a") as f:
+    with open(LOG_NAME, "a") as f:
         for line in result:
             print(line, file=f)
 
@@ -115,7 +115,7 @@ def ChkTopFive(now_agents_positions):
     for _ in range(5):
         top_five.append(now_agents_positions.pop(0))
     print("上位5: ", top_five)
-    with open("zzlog.txt", "a") as f:
+    with open(LOG_NAME, "a") as f:
         print(f"上位5: {top_five}", file=f)
     
 
@@ -135,7 +135,7 @@ def CalcStandardHensa(now_agents_positions):
 
     std = np.std(now_agents_positions)
     print("標準偏差: ", std)
-    with open("zzlog.txt", "a") as f:
+    with open(LOG_NAME, "a") as f:
         f.write(f"第一四分位数: {d1}\n")
         f.write(f"第二四分位数: {d2}\n")
         f.write(f"第三四分位数: {d3}\n")
