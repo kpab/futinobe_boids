@@ -131,7 +131,8 @@ class Simulation:
         else:
             now_frame += 1
         # -- 現在地リスト格納 --
-        ChkAgentPos(now_agents_positions, self.agents)
+        if now_frame > SKIP_RESULT_COUNT:
+            ChkAgentPos(now_agents_positions, self.agents)
 
         for agent in self.agents: # 位置こーしん
             agent.update(self.agents, self.walls)
@@ -146,14 +147,16 @@ class Simulation:
             if agent.futinobe:
                 for g in self.goal_enter:
                     if np.linalg.norm(agent.position - g) < 15:
-                        self.agents.remove(agent)
+                        if agent in self.agents:
+                            self.agents.remove(agent)
                         if now_frame > SKIP_RESULT_COUNT:
                             self.goaled_agents.append(agent)
                         continue
             else:
                 for g in self.goal_exit:
                     if np.linalg.norm(agent.position - g) < 15:
-                        self.agents.remove(agent)
+                        if agent in self.agents:
+                            self.agents.remove(agent)
                         if now_frame > SKIP_RESULT_COUNT:
                             self.goaled_agents.append(agent)
                         continue
@@ -214,8 +217,10 @@ class Simulation:
         anim = FuncAnimation(fig, update, frames=num_frames, interval=50, blit=False)
         # ax.invert_yaxis()
         plt.show()
+
         Heatmapping(now_agents_positions, self.walls)
         HeatmappingNumber(now_agents_positions, self.walls)
         SayResult(now_frame, self.goaled_agents)
         ChkTopFive(now_agents_positions)
+        CalcStandardHensa(now_agents_positions)
 
