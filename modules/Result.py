@@ -89,7 +89,7 @@ def HeatmappingNumber(now_agents_positions, walls):
     ax2.invert_yaxis()
     plt.show()
 
-# 上位5%の通られたマスを出力
+# 上位5位の通られたマスを出力
 def ChkTopFive(now_agents_positions):
     # 二次元を一次元に変換
     now_agents_positions = sum(now_agents_positions, [])
@@ -98,3 +98,13 @@ def ChkTopFive(now_agents_positions):
     for _ in range(5):
         top_five.append(now_agents_positions.pop(0))
     print("上位5: ", top_five)
+
+# 標準偏差0以外のところ
+def CalcStandardHensa(now_agents_positions):
+    # 二次元を一次元に変換
+    now_agents_positions = sum(now_agents_positions, [])
+    # 0を除去
+    now_agents_positions = list(filter(lambda x: x!=0, now_agents_positions))
+    now_agents_positions = np.array(now_agents_positions) # numpy配列に変換
+    std = np.std(now_agents_positions)
+    print("標準偏差: ", std)
