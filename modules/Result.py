@@ -70,8 +70,6 @@ def SayResult(frame, total_goaled_agents):
 # -- ヒートマップ --
 def Heatmapping(now_agents_positions, walls):
     result = []
-    result.append("-------------------------------")
-    result.append(f"記録: {datetime.datetime.now()}")
     fig, ax = plt.subplots(figsize=(10, 10),
                            facecolor="gainsboro")
     ax.set_xlim(0, WIDTH_HEATMAP)
@@ -142,4 +140,4 @@ def CalcStandardHensa(now_agents_positions):
         f.write(f"第二四分位数: {d2}\n")
         f.write(f"第三四分位数: {d3}\n")
         f.write(f"標準偏差: {round(std, 3)}\n")
-        f.write("-------------------------------")
+        f.write("-------------------------------\n")

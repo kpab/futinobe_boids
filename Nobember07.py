@@ -4,9 +4,10 @@
 from modules.Simulation import Simulation
 from modules.Constants_morning import *
 
-# シミュレーションの設定
-sim = Simulation(WIDTH, HEIGHT)
+sim_name = "朝ラッシュ@壁1"
 
+# シミュレーションの設定
+sim = Simulation(WIDTH, HEIGHT, sim_name)
 
 # sim.add_wall(400, 340, 410, 350)
 # 壁の追加

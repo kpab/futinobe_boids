@@ -6,9 +6,11 @@ from modules.Constants_morning import *
 from modules.Agent import Agent
 from modules.Result import *
 from modules.Constants_morning import *
+import datetime
 
 class Simulation:
-    def __init__(self, width, height):
+    def __init__(self, width, height, sim_name="no-name"):
+        self.sim_name = sim_name
         self.width = width
         self.height = height
         self.agents = []
@@ -217,6 +219,11 @@ class Simulation:
         anim = FuncAnimation(fig, update, frames=num_frames, interval=50, blit=False)
         # ax.invert_yaxis()
         plt.show()
+
+        with open("zzlog.txt", "a") as f:
+            f.write("-------------------------------\n")
+            f.write(f"記録: {datetime.datetime.now()}\n")
+            f.write(f"{self.sim_name}\n")
 
         Heatmapping(now_agents_positions, self.walls)
         HeatmappingNumber(now_agents_positions, self.walls)
