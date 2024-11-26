@@ -82,10 +82,19 @@ def HeatmappingNumber(now_agents_positions, walls):
     ax.set_xlim(0, WIDTH_HEATMAP)
     ax.set_ylim(0, HEIGHT_HEATMAP)
 
-    
     ax.set_title("~ヒートマップ~")
     ax2 = sns.heatmap(now_agents_positions, cmap='Greens',cbar=False, annot=True, fmt='d', annot_kws={'fontsize':5})
     for wall in walls:
             ax.add_patch(Rectangle((wall[0]/10, wall[1]/10), (wall[2]-wall[0])/10, (wall[3]-wall[1])/10))
     ax2.invert_yaxis()
     plt.show()
+
+# 上位5%の通られたマスを出力
+def ChkTopFive(now_agents_positions):
+    # 二次元を一次元に変換
+    now_agents_positions = sum(now_agents_positions, [])
+    list.sort(now_agents_positions, reverse=True) # こうじゅん
+    top_five = []
+    for _ in range(4):
+        top_five.append(now_agents_positions.pop(0))
+    print("上位5: ", top_five)

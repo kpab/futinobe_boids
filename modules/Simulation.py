@@ -6,7 +6,6 @@ from modules.Constants_morning import *
 from modules.Agent import Agent
 from modules.Result import *
 from modules.Constants_morning import *
-import sys
 
 class Simulation:
     def __init__(self, width, height):
@@ -218,4 +217,5 @@ class Simulation:
         Heatmapping(now_agents_positions, self.walls)
         HeatmappingNumber(now_agents_positions, self.walls)
         SayResult(now_frame, self.goaled_agents)
+        ChkTopFive(now_agents_positions)
 
