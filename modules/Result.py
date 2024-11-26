@@ -12,14 +12,18 @@ import japanize_matplotlib
 from matplotlib.patches import Rectangle
 from modules.Constants_morning import SKIP_RESULT_COUNT,WIDTH_HEATMAP,HEIGHT_HEATMAP, LOG_NAME
 import numpy as np
-import datetime
-
 
 # エージェントの現在地取得
 def ChkAgentPos(now_agents_positions, agents):
     for agent in agents:
-        # print(agent.position)
-        now_agents_positions[math.floor(agent.position[1])//10][math.floor(agent.position[0])//10] += 1
+        # サイズ変換
+        x_index = int(math.floor(agent.position[0]) // 10) 
+        y_index = int(math.floor(agent.position[1]) // 10)
+        # 範囲制限
+        x_index = np.clip(x_index, 0, WIDTH_HEATMAP - 1)
+        y_index = np.clip(y_index, 0, HEIGHT_HEATMAP - 1)
+
+        now_agents_positions[y_index][x_index] += 1
     
     return now_agents_positions
 
@@ -29,12 +33,12 @@ def SayResult(frame, total_goaled_agents):
     print("frame: ",frame)
     if frame <=  SKIP_RESULT_COUNT:
         print("残念!!今回の結果は全てスキップされました")
-        with open(LOG_NAME, "w") as f:
+        with open(LOG_NAME, "a") as f:
             print("残念!!今回の結果は全てスキップされました", file=f)
         return
     if len(total_goaled_agents) < 1:
         print("まだ誰も着いてないよ。もう少し待とう")
-        with open(LOG_NAME, "w") as f:
+        with open(LOG_NAME, "a") as f:
             print("まだ誰も着いてないよ。もう少し待とう", file=f)
         return
     futinobe_goaled_count = 0
@@ -74,14 +78,13 @@ def Heatmapping(now_agents_positions, walls):
                            facecolor="gainsboro")
     ax.set_xlim(0, WIDTH_HEATMAP)
     ax.set_ylim(0, HEIGHT_HEATMAP)
-    # ax.set_ylim(HEIGHT_HEATMAP, 0) # こいつも
     
     ax.set_title("~ヒートマップ~")
-    ax2 = sns.heatmap(now_agents_positions, cmap='Greens',cbar=False)
+    ax = sns.heatmap(now_agents_positions, cmap='Greens',cbar=False)
     for wall in walls:
             ax.add_patch(Rectangle((wall[0]/10, wall[1]/10), (wall[2]-wall[0])/10, (wall[3]-wall[1])/10))
-    ax2.invert_yaxis()
-    plt.show()
+    ax.invert_yaxis()
+    # plt.show()
     result.append(f"最大通過人数: {np.amax(now_agents_positions)}")
     print(f"最大通過人数: {np.amax(now_agents_positions)}")
     now_agents_positions = np.array(now_agents_positions)
@@ -92,19 +95,20 @@ def Heatmapping(now_agents_positions, walls):
         for line in result:
             print(line, file=f)
 
-def HeatmappingNumber(now_agents_positions, walls):    
-    fig, ax = plt.subplots(figsize=(10, 10),
+def HeatmappingNumber(now_agents_positions, walls, fig_name):    
+    fig2, ax2 = plt.subplots(figsize=(16, 10),
                            facecolor="gainsboro")
     
-    ax.set_xlim(0, WIDTH_HEATMAP)
-    ax.set_ylim(0, HEIGHT_HEATMAP)
+    ax2.set_xlim(0, WIDTH_HEATMAP)
+    ax2.set_ylim(0, HEIGHT_HEATMAP)
 
-    ax.set_title("~ヒートマップ~")
+    ax2.set_title("~ヒートマップ~")
     ax2 = sns.heatmap(now_agents_positions, cmap='Greens',cbar=False, annot=True, fmt='d', annot_kws={'fontsize':5})
     for wall in walls:
-            ax.add_patch(Rectangle((wall[0]/10, wall[1]/10), (wall[2]-wall[0])/10, (wall[3]-wall[1])/10))
+            ax2.add_patch(Rectangle((wall[0]/10, wall[1]/10), (wall[2]-wall[0])/10, (wall[3]-wall[1])/10))
     ax2.invert_yaxis()
-    plt.show()
+    # plt.show()
+    fig2.savefig(f"z{fig_name}.png")
 
 # 上位5位の通られたマスを出力
 def ChkTopFive(now_agents_positions):
@@ -120,7 +124,7 @@ def ChkTopFive(now_agents_positions):
     
 
 # 統計
-def CalcStandardHensa(now_agents_positions):
+def CalcStandardHensa(now_agents_positions, fig_name):
     # 二次元を一次元に変換
     now_agents_positions = sum(now_agents_positions, [])
     # 0を除去
@@ -131,7 +135,13 @@ def CalcStandardHensa(now_agents_positions):
     d2 = np.percentile(now_agents_positions, 50)
     d3 = np.percentile(now_agents_positions, 75)
 
-
+    # 箱ひげ図のプロット
+    fig3, ax = plt.subplots()
+    ax.boxplot(now_agents_positions, vert=False, showmeans=True)  # 横向き
+    ax.set_title('箱ひげ図')
+    ax.set_xlabel('通過人数')
+    
+    fig3.savefig(f"z{fig_name}_hako.png")
 
     std = np.std(now_agents_positions)
     print("標準偏差: ", std)

@@ -32,9 +32,3 @@ PERFECT_FAKE = True # やる
 HIDE = True # シミュレーション隠すか
 # ----------------
 LOG_NAME = "zzlog.txt"
-
-
-
-# ↓これよくないすぎるからいつか..
-now_agents_positions = [[0 for j in range(WIDTH_HEATMAP)] for i in range(HEIGHT_HEATMAP)]
-now_frame = 0 # 現在のフレーム数
