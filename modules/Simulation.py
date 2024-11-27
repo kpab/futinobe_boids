@@ -1,13 +1,15 @@
+from modules.Constants_morning import *
 import numpy as np
 import matplotlib
-matplotlib.use('TkAgg')
+if BACKGROUND:
+    matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.patches import Rectangle
 from modules.Constants_morning import *
 from modules.Agent import Agent
 from modules.Result import *
-from modules.Constants_morning import *
+
 import datetime
 
 now_agents_positions = [[0 for j in range(WIDTH_HEATMAP)] for i in range(HEIGHT_HEATMAP)]

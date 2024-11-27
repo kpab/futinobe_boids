@@ -110,17 +110,17 @@ def HeatmappingNumber(now_agents_positions, walls, fig_name):
     # plt.show()
     fig2.savefig(f"z{fig_name}.png")
 
-# 上位5位の通られたマスを出力
+# 上位5位の通られたマスを出力→top20に変更します
 def ChkTopFive(now_agents_positions):
     # 二次元を一次元に変換
     now_agents_positions = sum(now_agents_positions, [])
     list.sort(now_agents_positions, reverse=True) # こうじゅん
     top_five = []
-    for _ in range(5):
+    for _ in range(20):
         top_five.append(now_agents_positions.pop(0))
-    print("上位5: ", top_five)
+    # print("上位20: ", top_five)
     with open(LOG_NAME, "a") as f:
-        print(f"上位5: {top_five}", file=f)
+        print(f"上位20: {top_five}", file=f)
     
 
 # 統計
