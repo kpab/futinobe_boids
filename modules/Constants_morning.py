@@ -1,6 +1,6 @@
 # 朝ラッシュ用定数
 # ------------------------
-FRAME_COUNT = 6300
+FRAME_COUNT = 50300
 SKIP_RESULT_COUNT = 300 # 結果にカウントしないフレーム数
 BORN_RATE = 0.8
 FUTINOBE_RATE = 0.2 # 淵野辺率
@@ -35,4 +35,4 @@ PERFECT_FAKE = True # やる
 HIDE = True # シミュレーション隠すか
 BACKGROUND = True # Backgroundか
 # ----------------
-LOG_NAME = "zzlog.txt"
+LOG_NAME = "zylog.txt"

@@ -9,6 +9,7 @@ from matplotlib.patches import Rectangle
 from modules.Constants_morning import *
 from modules.Agent import Agent
 from modules.Result import *
+from modules.GappingHeatmap import GappingHeatmap
 
 import datetime
 
@@ -213,6 +214,21 @@ class Simulation:
         scatter = ax.scatter([], [], c=[])
 
         def update(frame):
+            if now_frame %5000 == 0 and now_frame>SKIP_RESULT_COUNT:
+                print(now_frame)
+                t_delta = datetime.timedelta(hours=9)
+                JST = datetime.timezone(t_delta, 'JST')
+                now = datetime.datetime.now(JST)
+                d = now.strftime('%Y/%m/%d %I:%M(%p)')
+                fig_name = now.strftime('%Y%m%d%H%M')
+                with open(LOG_NAME, "a") as f:
+                    f.write(f"ふる: {now_agents_positions}\n")
+                Heatmapping(now_agents_positions, self.walls)
+                HeatmappingNumber(now_agents_positions, self.walls, fig_name)
+                SayResult(now_frame, self.goaled_agents)
+                ChkTopFive(now_agents_positions)
+                CalcStandardHensa(now_agents_positions, fig_name)
+                HazuretiHako(now_agents_positions, fig_name)
             if now_frame == FRAME_COUNT:
                 plt.close(fig)
                 return []
@@ -241,11 +257,14 @@ class Simulation:
             f.write("-------------------------------\n")
             f.write(f"記録: {d}\n")
             f.write(f"{self.sim_name}\n")
+            f.write(f"全部: {now_agents_positions}\n") # 12/1追加
 
         Heatmapping(now_agents_positions, self.walls)
         HeatmappingNumber(now_agents_positions, self.walls, fig_name)
         SayResult(now_frame, self.goaled_agents)
         ChkTopFive(now_agents_positions)
         CalcStandardHensa(now_agents_positions, fig_name)
+        HazuretiHako(now_agents_positions, fig_name)
+        # GappingHeatmap()
         return []
 

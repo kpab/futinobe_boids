@@ -137,7 +137,7 @@ def CalcStandardHensa(now_agents_positions, fig_name):
 
     # 箱ひげ図のプロット
     fig3, ax = plt.subplots()
-    ax.boxplot(now_agents_positions, vert=False, showmeans=True)  # 横向き
+    ax.boxplot(now_agents_positions, whis=[0, 100],vert=False, showmeans=True)  # 横向き, 外れ値表記しないver
     ax.set_title('箱ひげ図')
     ax.set_xlabel('通過人数')
     
@@ -151,3 +151,19 @@ def CalcStandardHensa(now_agents_positions, fig_name):
         f.write(f"第三四分位数: {d3}\n")
         f.write(f"標準偏差: {round(std, 3)}\n")
         f.write("-------------------------------\n")
+
+
+def HazuretiHako(now_agents_positions, fig_name):
+    # 二次元を一次元に変換
+    now_agents_positions = sum(now_agents_positions, [])
+    # 0を除去
+    now_agents_positions = list(filter(lambda x: x!=0, now_agents_positions))
+    now_agents_positions = np.array(now_agents_positions) # numpy配列に変換
+
+    # 箱ひげ図のプロット
+    fig4, ax = plt.subplots()
+    ax.boxplot(now_agents_positions, vert=False, showmeans=True, whis=1.2)  # 横向き, 外れ値表記しないver
+    ax.set_title('箱ひげ図(外れ値あり)')
+    ax.set_xlabel('通過人数')
+
+    fig4.savefig(f"z{fig_name}_hakohazure.png")
