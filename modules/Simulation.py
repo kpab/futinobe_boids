@@ -215,7 +215,7 @@ class Simulation:
 
         def update(frame):
             if now_frame %5000 == 0 and now_frame>SKIP_RESULT_COUNT:
-                print(now_frame)
+                # print(now_frame)
                 t_delta = datetime.timedelta(hours=9)
                 JST = datetime.timezone(t_delta, 'JST')
                 now = datetime.datetime.now(JST)
